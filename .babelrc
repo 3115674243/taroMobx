@@ -1,0 +1,22 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    ["@babel/preset-typescript"],
+    ["@babel/preset-react"]
+  ],
+  "env": {
+  "development": {
+    "plugins": ["transform-es2015-modules-commonjs"]
+  },
+  "test": {
+    "plugins": ["transform-es2015-modules-commonjs"]
+  }
+}
+}

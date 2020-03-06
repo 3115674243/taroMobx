@@ -1,21 +1,22 @@
-import { ComponentType } from 'react'
-import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
-import { observer, inject } from '@tarojs/mobx'
+import {ComponentType} from 'react'
+import Taro, {Component, Config} from '@tarojs/taro'
+import {View, Button, Text} from '@tarojs/components'
+import {observer, inject} from '@tarojs/mobx'
 
 import './index.scss'
 
 type PageStateProps = {
   counterStore: {
-    counter: number,
-    increment: Function,
-    decrement: Function,
+    counter: number
+    increment: Function
+    decrement: Function
     incrementAsync: Function
   }
+  name: 'test'
 }
 
 interface Index {
-  props: PageStateProps;
+  props: PageStateProps
 }
 
 @inject('counterStore')
@@ -33,37 +34,42 @@ class Index extends Component {
     navigationBarTitleText: '首页'
   }
 
-  componentWillMount () { }
+  componentWillMount() {
+  }
 
-  componentWillReact () {
+  componentWillReact() {
     console.log('componentWillReact')
   }
 
-  componentDidMount () { }
+  componentDidMount() {
+  }
 
-  componentWillUnmount () { }
+  componentWillUnmount() {
+  }
 
-  componentDidShow () { }
+  componentDidShow() {
+  }
 
-  componentDidHide () { }
+  componentDidHide() {
+  }
 
   increment = () => {
-    const { counterStore } = this.props
+    const {counterStore} = this.props
     counterStore.increment()
   }
 
   decrement = () => {
-    const { counterStore } = this.props
+    const {counterStore} = this.props
     counterStore.decrement()
   }
 
   incrementAsync = () => {
-    const { counterStore } = this.props
+    const {counterStore} = this.props
     counterStore.incrementAsync()
   }
 
-  render () {
-    const { counterStore: { counter } } = this.props
+  render() {
+    const {counterStore: {counter}} = this.props
     return (
       <View className='index'>
         <Button onClick={this.increment}>+</Button>
@@ -75,4 +81,4 @@ class Index extends Component {
   }
 }
 
-export default Index  as ComponentType
+export default Index as ComponentType
