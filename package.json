@@ -31,7 +31,7 @@
   "license": "MIT",
   "jest": {
     "roots": [
-      "<rootDir>/src"
+      "<rootDir>"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

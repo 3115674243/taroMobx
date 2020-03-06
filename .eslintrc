@@ -26,6 +26,7 @@
     "project": "./tsconfig.json"
   },
   "env": {
-    "jest": true
+    "jest": true,
+    "node": true
   }
 }
