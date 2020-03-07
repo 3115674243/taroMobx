@@ -12,6 +12,12 @@ type PageStateProps = {
     decrement: Function
     incrementAsync: Function
   }
+  userStore: {
+    user: any
+    setUser: Function
+    wxPower: boolean
+    changeWXPower: Function
+  }
   name: 'test'
 }
 
@@ -19,7 +25,7 @@ interface Index {
   props: PageStateProps
 }
 
-@inject('counterStore')
+@inject('counterStore','userStore')
 @observer
 class Index extends Component {
 
@@ -41,7 +47,17 @@ class Index extends Component {
     console.log('componentWillReact')
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const setting=await Taro.getSetting()
+    if(setting.authSetting['scope.userInfo']){
+      const {userInfo}=await Taro.getUserInfo();
+      if(userInfo){
+        await this.props.userStore.setUser(userInfo);
+        await this.props.userStore.changeWXPower(true);
+      }
+
+    }
+
   }
 
   componentWillUnmount() {
