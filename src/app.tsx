@@ -33,7 +33,8 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/index/index',
-      'pages/user/user'
+      'pages/user/user',
+      'pages/customMap/customMap'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -72,7 +73,13 @@ class App extends Component {
   async componentDidMount () {
   }
 
-  componentDidShow () {}
+  componentDidShow () {
+    Taro.showToast({
+      title: '欢迎回来',
+      icon: 'success',
+      duration: 2000
+    })
+  }
 
   componentDidHide () {}
 

@@ -1,5 +1,4 @@
 /*
-
 import { shallow } from 'enzyme'
 import Index from '../pages/index'
 
@@ -9,5 +8,4 @@ describe('ReactComponent',()=>{
     const index = shallow(Index );
     index.state('name')
   });
-});
-*/
+});*/

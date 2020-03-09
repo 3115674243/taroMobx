@@ -1,15 +1,17 @@
-import {ComponentType} from 'react'
-import Taro, {Component, Config} from '@tarojs/taro'
-import {View, Image, Text} from '@tarojs/components'
-import {observer, inject} from '@tarojs/mobx'
-import {AtButton, AtInput, AtDivider} from 'taro-ui'
+import { ComponentType } from 'react'
+import Taro, { Component, Config } from '@tarojs/taro'
+import { View, Text } from '@tarojs/components'
+import { observer, inject } from '@tarojs/mobx'
+import { AtButton, AtInput, AtDivider, AtAvatar } from 'taro-ui'
 
 import './index.scss'
-import userStore from "../../store/user";
+import userStore from '../../store/user'
 
 type PageStateProps = {
   userStore: {
-    user: any
+    user: {
+      nickName: string
+    }
     setUser: Function
     wxPower: boolean
     changeWXPower: Function
@@ -18,21 +20,18 @@ type PageStateProps = {
 
 interface User {
   props: PageStateProps
+  state: {
+    location: {
+      longitude: number
+      latitude: number
+    }
+  }
 }
 
 @inject('userStore')
 @observer
 class User extends Component {
 
-  constructor(props){
-    super(props);
-    this.state= {
-      location: {
-        longitude: 0,
-        latitude: 0
-      }
-    }
-  }
   /**
    * 指定config的类型声明为: Taro.Config
    *
@@ -41,41 +40,41 @@ class User extends Component {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
   config: Config = {
-    navigationBarTitleText: '首页'
+    navigationBarTitleText: '用户中心'
   }
 
 
-  componentWillMount() {
+  componentWillMount () {
   }
 
-  componentWillReact() {
+  componentWillReact () {
     console.log('componentWillReact')
   }
 
-  componentDidMount() {
+  componentDidMount () {
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
   }
 
-  componentDidShow() {
+  componentDidShow () {
   }
 
-  componentDidHide() {
+  componentDidHide () {
   }
 
-  handleClick(user) {
-    return this.props.userStore.setUser(user);
+  handleClick (user) {
+    return this.props.userStore.setUser(user)
   }
 
-  changeUser(key, value) {
-    const {userStore: {user}} = this.props;
-    user[key] = value;
-    userStore.setUser(user);
-    return value;
+  changeUser (key, value) {
+    const { userStore: { user } } = this.props
+    user[key] = value
+    userStore.setUser(user)
+    return value
   }
 
-  onShareAppMessage(obj: any) {
+  onShareAppMessage (obj: any) {
     if (obj.from === 'button') {
       // 来自页面内转发按钮
       console.log(obj.target)
@@ -88,35 +87,52 @@ class User extends Component {
   }
 
   setUserInfo = async (e) => {
-    if (e.detail) {
-      await this.props.userStore.setUser(e.detail.userInfo);
-      await this.props.userStore.changeWXPower(true);
+    if (e.detail.userInfo) {
+      await this.props.userStore.setUser(e.detail.userInfo)
+      await this.props.userStore.changeWXPower(true)
     } else {
-      await this.props.userStore.changeWXPower(false);
+      await this.props.userStore.changeWXPower(false)
     }
   }
 
-  async setUserLoaction() {
-    const res = await Taro.getLocation({});
-    const {longitude, latitude} = res;
-    this.setState({location: {longitude, latitude}});
+  async setUserLoaction () {
+    const res = await Taro.getLocation({})
+    const { longitude, latitude } = res
+    this.setState({ location: { longitude, latitude } })
   }
 
-  render() {
-    const {userStore: {user, wxPower}} = this.props;
+  render () {
+    const { userStore: { user, wxPower } } = this.props
+    const { latitude, longitude } = this.state.location||{};
     return (
       <View className='index'>
         {wxPower ? <View>
             <View className='userinfo'>
-              <Image src={user.avatarUrl} className={'userinfo-avatar'} />
+              <AtAvatar circle openData={{ type: 'userAvatarUrl' }}></AtAvatar>
             </View>
-            <AtInput name='name' type='text' placeholder='请输入内容' value={user.nickName}
-                     onChange={this.changeUser.bind(this, 'nickName')} />
-            <AtButton type='primary' onClick={this.handleClick.bind(this, {name: '小张'})}>SAVE USER</AtButton>
+
+            <AtInput
+              name='name'
+              type='text'
+              placeholder='请输入内容'
+              value={user.nickName}
+              onChange={this.changeUser.bind(this, 'nickName')}
+            />
+            <AtButton type='primary' onClick={this.handleClick.bind(this, { name: '小张' })}>SAVE USER</AtButton>
             <AtDivider content='>_<-快分开->_<' />
             <AtButton type='primary' openType='share'>SHARE</AtButton>
             <Text>{this.state.location.latitude},{this.state.location.longitude} </Text>
             <AtButton type='secondary' onClick={this.setUserLoaction.bind(this)}>LOCATION</AtButton>
+            {latitude
+            && longitude
+            && <AtButton
+              className='at-row'
+              onClick={() =>
+                Taro.navigateTo({
+                  url: `/pages/customMap/customMap?longitude=${longitude}&latitude=${latitude}`
+                })
+              }
+            >CONSULT MAP</AtButton>}
           </View>
           : <AtButton openType='getUserInfo' onGetUserInfo={this.setUserInfo}>LOGIN</AtButton>}
 

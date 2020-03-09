@@ -2,7 +2,7 @@ import { observable } from 'mobx'
 
 const userStore = observable({
   user: {
-    name:'小王'
+    nickName:'小王'
   },
   wxPower:false,
   setUser(user){
